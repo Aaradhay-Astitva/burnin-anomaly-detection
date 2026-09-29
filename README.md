@@ -30,6 +30,20 @@ Screen any CSV with the trained model (writes status, V168 forecast and reasons 
 python -m burnin.predict path/to/lots.csv -o reports/predictions.csv
 ```
 
+## Deploy the dashboard (Streamlit Community Cloud)
+
+1. Go to https://share.streamlit.io and sign in with GitHub.
+2. **Create app → Deploy a public app from GitHub**, then set:
+   - Repository: `Aaradhay-Astitva/burnin-anomaly-detection`
+   - Branch: `main`
+   - Main file path: `app/streamlit_app.py`
+3. Under **Advanced settings**, pick the newest Python version offered.
+4. Click **Deploy**. The first build takes a few minutes.
+
+- The trained model (`models/pipeline.joblib`), the thresholds and the demo data are committed, so the app works without any setup.
+- If the platform installs different library versions than the ones the model was saved with, the app retrains itself on the committed training data at first start (about 15 s). The results are identical.
+- Pushing to `main` redeploys the app automatically.
+
 ## Data format
 
 One row per part: `lot_id, part_id, V0, V24, datasheet_max` are required. `V96`, `V168`,

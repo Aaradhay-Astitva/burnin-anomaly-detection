@@ -91,6 +91,12 @@ def decide(raw: pd.DataFrame, th: Thresholds, stages=STAGES,
 SEVERITY = {"PASS": 0, "INSPECT": 1, "REJECT": 2}
 
 
+def library_versions() -> dict:
+    """Versions a pickled pipeline depends on; a mismatch means it should be refit."""
+    import sklearn
+    return {"scikit-learn": sklearn.__version__, "numpy": np.__version__}
+
+
 def summarize_parts(res: pd.DataFrame) -> pd.DataFrame:
     """One row per physical part: the worst status across its parameters."""
     r = res.assign(_sev=res["status"].map(SEVERITY),
@@ -114,6 +120,7 @@ class ScreeningPipeline:
         avail = times_available(df)
         self.detectors_ = {s: DynamicOutlierDetector(stage=s).fit(df) for s in STAGES if s in avail}
         self.drift_ = DriftPredictor(self.drift_model).fit(df)
+        self.versions_ = library_versions()
         return self
 
     def raw_scores(self, df: pd.DataFrame, return_details: bool = False):

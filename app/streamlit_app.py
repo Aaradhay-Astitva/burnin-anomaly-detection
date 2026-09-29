@@ -7,6 +7,7 @@ from __future__ import annotations
 import copy
 import json
 import sys
+import warnings
 from pathlib import Path
 
 import joblib
@@ -19,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from burnin import GROUP_COLS, TIMES, generate  # noqa: E402
-from burnin.decision import ScreeningPipeline, Thresholds, summarize_parts  # noqa: E402
+from burnin.decision import ScreeningPipeline, Thresholds, library_versions, summarize_parts  # noqa: E402
 from burnin.evaluate import classification_metrics  # noqa: E402
 from burnin.explain import SEP  # noqa: E402
 from burnin.features import MIN_LOT_SIZE, robust_center_scale, small_lots, times_available, validate_input  # noqa: E402
@@ -36,16 +37,28 @@ st.set_page_config(page_title="Burn-in Anomaly Screening", page_icon="🔬", lay
 
 
 # ----------------------------------------------------------------- loading ---
-@st.cache_resource
+@st.cache_resource(show_spinner="Loading model...")
 def load_pipeline() -> ScreeningPipeline:
+    """Load the trained pipeline. If it was saved with different library versions
+    (e.g. on a hosting platform), refit it from the committed training data."""
     path = MODELS / "pipeline.joblib"
     if path.exists():
-        return joblib.load(path)
+        try:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")      # version-mismatch warnings; handled below
+                pipe = joblib.load(path)
+            if getattr(pipe, "versions_", None) == library_versions():
+                return pipe
+        except Exception:
+            pass
     if not (DATA / "burnin_train.csv").exists():
         generate.main(DATA)
     th_path = MODELS / "thresholds.json"
     th = Thresholds.load(th_path) if th_path.exists() else Thresholds()
-    return ScreeningPipeline(th).fit(pd.read_csv(DATA / "burnin_train.csv"))
+    metrics = load_metrics()
+    drift_model = metrics.get("drift_model", "gbm") if metrics else "gbm"
+    with st.spinner("First start on this server: training the model on the committed data (~15 s)..."):
+        return ScreeningPipeline(th, drift_model=drift_model).fit(pd.read_csv(DATA / "burnin_train.csv"))
 
 
 @st.cache_data(show_spinner="Screening parts...")
