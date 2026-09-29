@@ -1,0 +1,7 @@
+{
+  "z_inspect": 5.0,
+  "z_reject": 6.5,
+  "if_pct": 0.99,
+  "slope_k": 5.0,
+  "guard_frac": 0.7
+}

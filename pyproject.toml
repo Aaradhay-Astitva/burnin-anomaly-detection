@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "burnin"
+version = "0.1.0"
+description = "AI-driven anomaly detection for component burn-in & screening"
+requires-python = ">=3.10"
+dependencies = ["numpy", "pandas", "scikit-learn", "joblib", "plotly", "matplotlib", "streamlit"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

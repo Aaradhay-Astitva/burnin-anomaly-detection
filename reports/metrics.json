@@ -1,0 +1,260 @@
+{
+  "target_recall": 0.98,
+  "thresholds": {
+    "z_inspect": 5.0,
+    "z_reject": 6.5,
+    "if_pct": 0.99,
+    "slope_k": 5.0,
+    "guard_frac": 0.7
+  },
+  "drift_model": "gbm",
+  "cv": {
+    "detection": {
+      "Static datasheet limits (baseline)": {
+        "recall": 0.1451,
+        "false_negatives": 324.0,
+        "precision": 1.0,
+        "f2": 0.175,
+        "false_positive_rate": 0.0,
+        "tp": 55.0,
+        "fp": 0.0,
+        "tn": 9621.0
+      },
+      "Module A @24h only": {
+        "recall": 0.5673,
+        "false_negatives": 164.0,
+        "precision": 0.9908,
+        "f2": 0.6203,
+        "false_positive_rate": 0.0002,
+        "tp": 215.0,
+        "fp": 2.0,
+        "tn": 9619.0
+      },
+      "Module B only (24h forecast)": {
+        "recall": 0.496,
+        "false_negatives": 191.0,
+        "precision": 0.6836,
+        "f2": 0.5248,
+        "false_positive_rate": 0.009,
+        "tp": 188.0,
+        "fp": 87.0,
+        "tn": 9534.0
+      },
+      "Early screen @24h (static + A + B)": {
+        "recall": 0.6438,
+        "false_negatives": 135.0,
+        "precision": 0.7372,
+        "f2": 0.6605,
+        "false_positive_rate": 0.009,
+        "tp": 244.0,
+        "fp": 87.0,
+        "tn": 9534.0
+      },
+      "Full run @168h (static + A; forecast superseded)": {
+        "recall": 0.9974,
+        "false_negatives": 1.0,
+        "precision": 0.9947,
+        "f2": 0.9968,
+        "false_positive_rate": 0.0002,
+        "tp": 378.0,
+        "fp": 2.0,
+        "tn": 9619.0
+      }
+    },
+    "drift_mae": {
+      "ridge": {
+        "MAE_all": 0.446,
+        "RMSE_all": 1.739,
+        "MAE_good_parts": 0.212,
+        "MAE_accelerating": 12.665,
+        "MAE_erratic": 4.299,
+        "MAE_gross_fail": 0.583,
+        "MAE_latent_linear": 9.199,
+        "MAE_lot_outlier": 0.794,
+        "MAE_step_jump": 10.737
+      },
+      "rf": {
+        "MAE_all": 0.419,
+        "RMSE_all": 1.547,
+        "MAE_good_parts": 0.232,
+        "MAE_accelerating": 12.495,
+        "MAE_erratic": 3.038,
+        "MAE_gross_fail": 0.987,
+        "MAE_latent_linear": 3.705,
+        "MAE_lot_outlier": 1.023,
+        "MAE_step_jump": 10.75
+      },
+      "gbm": {
+        "MAE_all": 0.388,
+        "RMSE_all": 1.576,
+        "MAE_good_parts": 0.202,
+        "MAE_accelerating": 12.424,
+        "MAE_erratic": 3.255,
+        "MAE_gross_fail": 0.719,
+        "MAE_latent_linear": 3.941,
+        "MAE_lot_outlier": 0.642,
+        "MAE_step_jump": 10.724
+      },
+      "naive_linear_extrapolation": {
+        "MAE_all": 5.005,
+        "RMSE_all": 6.576,
+        "MAE_good_parts": 4.643,
+        "MAE_accelerating": 6.182,
+        "MAE_erratic": 16.417,
+        "MAE_gross_fail": 38.136,
+        "MAE_latent_linear": 4.467,
+        "MAE_lot_outlier": 17.345,
+        "MAE_step_jump": 6.331
+      }
+    }
+  },
+  "test": {
+    "detection": {
+      "Static datasheet limits (baseline)": {
+        "recall": 0.1706,
+        "false_negatives": 141.0,
+        "precision": 1.0,
+        "f2": 0.2045,
+        "false_positive_rate": 0.0,
+        "tp": 29.0,
+        "fp": 0.0,
+        "tn": 3830.0
+      },
+      "Module A @24h only": {
+        "recall": 0.5588,
+        "false_negatives": 75.0,
+        "precision": 0.9794,
+        "f2": 0.6113,
+        "false_positive_rate": 0.0005,
+        "tp": 95.0,
+        "fp": 2.0,
+        "tn": 3828.0
+      },
+      "Module B only (24h forecast)": {
+        "recall": 0.5,
+        "false_negatives": 85.0,
+        "precision": 0.7658,
+        "f2": 0.5373,
+        "false_positive_rate": 0.0068,
+        "tp": 85.0,
+        "fp": 26.0,
+        "tn": 3804.0
+      },
+      "Early screen @24h (static + A + B)": {
+        "recall": 0.6118,
+        "false_negatives": 66.0,
+        "precision": 0.8,
+        "f2": 0.642,
+        "false_positive_rate": 0.0068,
+        "tp": 104.0,
+        "fp": 26.0,
+        "tn": 3804.0
+      },
+      "Full run @168h (static + A; forecast superseded)": {
+        "recall": 1.0,
+        "false_negatives": 0.0,
+        "precision": 0.977,
+        "f2": 0.9953,
+        "false_positive_rate": 0.001,
+        "tp": 170.0,
+        "fp": 4.0,
+        "tn": 3826.0
+      }
+    },
+    "recall_by_type": {
+      "Static datasheet limits (baseline)": {
+        "accelerating": 0.0,
+        "erratic": 0.0,
+        "gross_fail": 1.0,
+        "latent_linear": 0.0,
+        "lot_outlier": 0.0,
+        "step_jump": 0.0
+      },
+      "Module A @24h only": {
+        "accelerating": 0.029,
+        "erratic": 0.75,
+        "gross_fail": 1.0,
+        "latent_linear": 0.741,
+        "lot_outlier": 1.0,
+        "step_jump": 0.0
+      },
+      "Module B only (24h forecast)": {
+        "accelerating": 0.143,
+        "erratic": 0.393,
+        "gross_fail": 1.0,
+        "latent_linear": 0.852,
+        "lot_outlier": 0.708,
+        "step_jump": 0.0
+      },
+      "Early screen @24h (static + A + B)": {
+        "accelerating": 0.143,
+        "erratic": 0.821,
+        "gross_fail": 1.0,
+        "latent_linear": 0.852,
+        "lot_outlier": 1.0,
+        "step_jump": 0.0
+      },
+      "Full run @168h (static + A; forecast superseded)": {
+        "accelerating": 1.0,
+        "erratic": 1.0,
+        "gross_fail": 1.0,
+        "latent_linear": 1.0,
+        "lot_outlier": 1.0,
+        "step_jump": 1.0
+      }
+    },
+    "drift_mae": {
+      "ridge": {
+        "MAE_all": 0.489,
+        "RMSE_all": 1.877,
+        "MAE_good_parts": 0.208,
+        "MAE_accelerating": 13.006,
+        "MAE_erratic": 4.892,
+        "MAE_gross_fail": 0.576,
+        "MAE_latent_linear": 9.087,
+        "MAE_lot_outlier": 0.711,
+        "MAE_step_jump": 10.642
+      },
+      "rf": {
+        "MAE_all": 0.446,
+        "RMSE_all": 1.769,
+        "MAE_good_parts": 0.202,
+        "MAE_accelerating": 12.805,
+        "MAE_erratic": 5.532,
+        "MAE_gross_fail": 0.729,
+        "MAE_latent_linear": 2.851,
+        "MAE_lot_outlier": 0.862,
+        "MAE_step_jump": 10.721
+      },
+      "gbm": {
+        "MAE_all": 0.432,
+        "RMSE_all": 1.766,
+        "MAE_good_parts": 0.19,
+        "MAE_accelerating": 12.6,
+        "MAE_erratic": 5.713,
+        "MAE_gross_fail": 0.462,
+        "MAE_latent_linear": 3.169,
+        "MAE_lot_outlier": 0.59,
+        "MAE_step_jump": 10.682
+      },
+      "naive_linear_extrapolation": {
+        "MAE_all": 4.328,
+        "RMSE_all": 5.536,
+        "MAE_good_parts": 3.996,
+        "MAE_accelerating": 7.502,
+        "MAE_erratic": 15.865,
+        "MAE_gross_fail": 22.79,
+        "MAE_latent_linear": 3.616,
+        "MAE_lot_outlier": 14.553,
+        "MAE_step_jump": 7.157
+      }
+    }
+  },
+  "ridge_coefficients": {
+    "z_drift_0_24": 0.053074031948561716,
+    "lot_med_lr_0_24": 0.030193376764500915,
+    "z_lvl_24": -0.01252269823328701,
+    "z_lvl_0": 0.011562324287872117,
+    "lr_0_24": 0.010221733135870126
+  }
+}

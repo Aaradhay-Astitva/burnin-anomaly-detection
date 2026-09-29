@@ -1,0 +1,66 @@
+Cross-validating on 20 training lots (GroupKFold by lot)...
+
+=== CV drift prediction: V168 error in uA ===
+                            MAE_all  RMSE_all  MAE_good_parts  MAE_accelerating  MAE_erratic  MAE_gross_fail  MAE_latent_linear  MAE_lot_outlier  MAE_step_jump
+ridge                         0.446     1.739           0.212            12.665        4.299           0.583              9.199            0.794         10.737
+rf                            0.419     1.547           0.232            12.495        3.038           0.987              3.705            1.023         10.750
+gbm                           0.388     1.576           0.202            12.424        3.255           0.719              3.941            0.642         10.724
+naive_linear_extrapolation    5.005     6.576           4.643             6.182       16.417          38.136              4.467           17.345          6.331
+
+Drift model for the final pipeline: gbm (Ridge coefficients are still reported for explainability)
+
+=== Tuned thresholds ===
+z_inspect     5.00
+z_reject      6.50
+if_pct        0.99
+slope_k       5.00
+guard_frac    0.70
+
+=== CV detection (thresholds tuned on these folds, so slightly optimistic) ===
+                                                  recall  false_negatives  precision      f2  false_positive_rate     tp    fp      tn
+Static datasheet limits (baseline)                0.1451            324.0     1.0000  0.1750               0.0000   55.0   0.0  9621.0
+Module A @24h only                                0.5673            164.0     0.9908  0.6203               0.0002  215.0   2.0  9619.0
+Module B only (24h forecast)                      0.4960            191.0     0.6836  0.5248               0.0090  188.0  87.0  9534.0
+Early screen @24h (static + A + B)                0.6438            135.0     0.7372  0.6605               0.0090  244.0  87.0  9534.0
+Full run @168h (static + A; forecast superseded)  0.9974              1.0     0.9947  0.9968               0.0002  378.0   2.0  9619.0
+
+=== HELD-OUT TEST detection (8 unseen lots, 4000 parts) ===
+                                                  recall  false_negatives  precision      f2  false_positive_rate     tp    fp      tn
+Static datasheet limits (baseline)                0.1706            141.0     1.0000  0.2045               0.0000   29.0   0.0  3830.0
+Module A @24h only                                0.5588             75.0     0.9794  0.6113               0.0005   95.0   2.0  3828.0
+Module B only (24h forecast)                      0.5000             85.0     0.7658  0.5373               0.0068   85.0  26.0  3804.0
+Early screen @24h (static + A + B)                0.6118             66.0     0.8000  0.6420               0.0068  104.0  26.0  3804.0
+Full run @168h (static + A; forecast superseded)  1.0000              0.0     0.9770  0.9953               0.0010  170.0   4.0  3826.0
+
+=== HELD-OUT TEST recall by defect type ===
+recall by defect type                             accelerating  erratic  gross_fail  latent_linear  lot_outlier  step_jump
+Static datasheet limits (baseline)                       0.000    0.000         1.0          0.000        0.000        0.0
+Module A @24h only                                       0.029    0.750         1.0          0.741        1.000        0.0
+Module B only (24h forecast)                             0.143    0.393         1.0          0.852        0.708        0.0
+Early screen @24h (static + A + B)                       0.143    0.821         1.0          0.852        1.000        0.0
+Full run @168h (static + A; forecast superseded)         1.000    1.000         1.0          1.000        1.000        1.0
+
+=== HELD-OUT TEST drift prediction: V168 error in uA ===
+                            MAE_all  RMSE_all  MAE_good_parts  MAE_accelerating  MAE_erratic  MAE_gross_fail  MAE_latent_linear  MAE_lot_outlier  MAE_step_jump
+ridge                         0.489     1.877           0.208            13.006        4.892           0.576              9.087            0.711         10.642
+rf                            0.446     1.769           0.202            12.805        5.532           0.729              2.851            0.862         10.721
+gbm                           0.432     1.766           0.190            12.600        5.713           0.462              3.169            0.590         10.682
+naive_linear_extrapolation    4.328     5.536           3.996             7.502       15.865          22.790              3.616           14.553          7.157
+
+=== Ridge coefficients (standardised inputs, target = log V168/V0) ===
+z_drift_0_24       0.0531
+lot_med_lr_0_24    0.0302
+z_lvl_24          -0.0125
+z_lvl_0            0.0116
+lr_0_24            0.0102
+
+=== Missed defects on test (false negatives: 0) ===
+none
+
+=== Status counts on test ===
+status
+PASS       3826
+REJECT      167
+INSPECT       7
+
+Saved models\pipeline.joblib, models\thresholds.json, reports\metrics.json, reports\test_results.csv
